@@ -1,0 +1,39 @@
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: circleci/golang:1.17
+
+    steps:
+      - checkout
+
+      # Install kubectl
+      - run:
+          name: Install kubectl
+          command: |
+            sudo apt-get update && sudo apt-get install -y apt-transport-https
+            sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+            sudo apt-get update
+            sudo apt-get install -y kubectl
+
+      # Authenticate with Kubernetes cluster
+      - run:
+          name: Configure Kubernetes credentials
+          command: |
+            echo $KUBE_CONFIG_DATA | base64 --decode > ${HOME}/kubeconfig
+            KUBECONFIG=${HOME}/kubeconfig
+
+      # Apply Kubernetes YAML
+      - run:
+          name: Deploy to Kubernetes
+          command: |
+            kubectl apply -f path/to/your/kubernetes/yaml/file.yaml
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - deploy:
+          context: your-circleci-context
