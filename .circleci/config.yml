@@ -1,0 +1,26 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.13  # or any other suitable Docker image
+    steps:
+      - checkout
+      # Add any other steps necessary to build your application
+
+  deploy:
+    docker:
+      - image: alpine/helm:3.7.0  # Helm image
+    steps:
+      - checkout
+      - run:
+          name: Install Helm
+          command: |
+            apk add --no-cache bash
+            helm version  # Verify Helm installation
+      - run:
+          name: Deploy Helm chart
+          command: |
+            helm upgrade --install helm-chart1 helm-chart
+            # Replace <release-name> with the name you want to give to your Helm release
+            # Replace <path-to-helm-chart> with the path to your Helm chart
