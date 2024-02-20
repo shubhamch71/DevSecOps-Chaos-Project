@@ -1,39 +1,26 @@
 version: 2.1
 
 jobs:
-  deploy:
+  build:
     docker:
-      - image: circleci/golang:1.17
-
+      - image: circleci/golang:1.13  # or any other suitable Docker image
     steps:
       - checkout
+      # Add any other steps necessary to build your application
 
-      # Install kubectl
+  deploy:
+    docker:
+      - image: alpine/helm:3.7.0  # Helm image
+    steps:
+      - checkout
       - run:
-          name: Install kubectl
+          name: Install Helm
           command: |
-            sudo apt-get update && sudo apt-get install -y apt-transport-https
-            sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-            sudo apt-get update
-            sudo apt-get install -y kubectl
-
-      # Authenticate with Kubernetes cluster
+            apk add --no-cache bash
+            helm version  # Verify Helm installation
       - run:
-          name: Configure Kubernetes credentials
+          name: Deploy Helm chart
           command: |
-            echo $KUBE_CONFIG_DATA | base64 --decode > ${HOME}/kubeconfig
-            KUBECONFIG=${HOME}/kubeconfig
-
-      # Apply Kubernetes YAML
-      - run:
-          name: Deploy to Kubernetes
-          command: |
-            kubectl apply -f path/to/your/kubernetes/yaml/file.yaml
-
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - deploy:
-          context: your-circleci-context
+            helm upgrade --install helm-chart1 helm-chart
+            # Replace <release-name> with the name you want to give to your Helm release
+            # Replace <path-to-helm-chart> with the path to your Helm chart
