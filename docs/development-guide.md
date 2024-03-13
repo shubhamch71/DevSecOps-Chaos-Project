@@ -5,16 +5,16 @@ This doc explains how to build and run the Online Boutique source code locally u
 ## Prerequisites
 
 - [Docker for Desktop](https://www.docker.com/products/docker-desktop)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/) (can be installed via `gcloud components install kubectl` for Option 1 - GKE)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/) 
 - [skaffold **2.0.2+**](https://skaffold.dev/docs/install/) (latest version recommended), a tool that builds and deploys Docker images in bulk. 
 - Clone the repository.
     ```sh
-    git clone https://github.com/GoogleCloudPlatform/microservices-demo
-    cd microservices-demo/
+    git clone repo-link
+    cd folder/
     ```
-- A Google Cloud project with Google Container Registry enabled. (for Option 1 - GKE)
-- [Minikube](https://minikube.sigs.k8s.io/docs/start/) (optional for Option 2 - Local Cluster)
-- [Kind](https://kind.sigs.k8s.io/) (optional for Option 2 - Local Cluster)
+
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/) 
+- [Kind](https://kind.sigs.k8s.io/) 
 
 
 ## Local Cluster 
